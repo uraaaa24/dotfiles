@@ -40,11 +40,13 @@ else
   echo "🍺 Homebrew is already installed."
 fi
 
-brew_prefix="$(brew --prefix)"
-if [[ -d "$brew_prefix/share" ]]; then
-  echo "🔐 Fixing Homebrew share directory permissions..."
-  sudo chmod go-w "$brew_prefix/share" 2>/dev/null || true
-  echo "  ✔ Secured $brew_prefix/share"
+if command -v brew &>/dev/null; then
+  brew_prefix="$(brew --prefix)"
+  if [[ -d "$brew_prefix/share" ]]; then
+    echo "🔐 Ensuring Homebrew share directory is not group/other writable..."
+    chmod go-w "$brew_prefix/share" 2>/dev/null || true
+    echo "  ✔ Checked $brew_prefix/share"
+  fi
 fi
 
 echo "🔧 Installing Homebrew packages via Brewfile..."
