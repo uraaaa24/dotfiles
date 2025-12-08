@@ -20,8 +20,9 @@ link() {
 
 link "$DOTFILES/.zshrc" "$HOME/.zshrc"
 
-link "$DOTFILES/config/nvim" "$HOME/.config/nvim"
-link "$DOTFILES/config/mise" "$HOME/.config/mise"
+link "$DOTFILES/.config/nvim" "$HOME/.config/nvim"
+link "$DOTFILES/.config/mise" "$HOME/.config/mise"
+link "$DOTFILES/.config/wezterm" "$HOME/.config/wezterm"
 
 # ---- Homebrew ----
 echo "🍺 Checking Homebrew..."
