@@ -1,1 +1,34 @@
-## dotfiles
+# dotfiles
+
+Personal notes and quick re-setup steps.
+
+## Purpose
+- Keep setup fast and repeatable
+- Prefer small, clear defaults over heavy customization
+- Make maintenance easy with `task`
+
+## Overview
+- `.config/nvim` Neovim config
+- `.zshrc` shell config
+- `Brewfile` dependencies
+- `setup.sh` initial setup
+
+## Setup (local)
+```sh
+task setup
+```
+
+## Common tasks
+### Task list
+- `task setup` Full setup (link + brew + mise)
+- `task link` Link dotfiles
+- `task brew:bootstrap` Install Homebrew if missing
+- `task brew:bundle` Install packages from Brewfile
+- `task brew:update` Update Homebrew packages
+- `task brew:doctor` Run Homebrew diagnostics
+- `task mise:install` Install runtimes via mise
+- `task nvim:sync` Sync Neovim plugins
+
+### Notes
+- Reflect new changes here
+- When unsure, re-check the Taskfile

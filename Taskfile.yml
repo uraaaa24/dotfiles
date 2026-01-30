@@ -1,0 +1,82 @@
+version: "3"
+
+tasks:
+  setup:
+    desc: Initial setup
+    cmds:
+      - task: link
+      - task: brew:bootstrap
+      - task: brew:bundle
+      - task: mise:install
+
+  link:
+    desc: Link dotfiles
+    cmds:
+      - |
+        set -euo pipefail
+        DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+        mkdir -p "$HOME/.config"
+        ln -snf "$DOTFILES/.zshrc" "$HOME/.zshrc"
+        ln -snf "$DOTFILES/.config/nvim" "$HOME/.config/nvim"
+        ln -snf "$DOTFILES/.config/mise" "$HOME/.config/mise"
+        ln -snf "$DOTFILES/.config/wezterm" "$HOME/.config/wezterm"
+
+  brew:bootstrap:
+    desc: Install Homebrew if missing
+    cmds:
+      - |
+        set -euo pipefail
+        if ! command -v brew >/dev/null 2>&1; then
+          echo "🍺 Homebrew not found. Installing Homebrew..."
+          NONINTERACTIVE=1 /bin/bash -c \
+            "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+      - |
+        if command -v brew >/dev/null 2>&1; then
+          brew_prefix="$(brew --prefix)"
+          if [[ -d "$brew_prefix/share" ]]; then
+            echo "🔐 Ensuring Homebrew share directory is not group/other writable..."
+            chmod go-w "$brew_prefix/share" 2>/dev/null || true
+            echo "  ✔ Checked $brew_prefix/share"
+          fi
+        fi
+
+  brew:bundle:
+    desc: Install packages from Brewfile
+    cmds:
+      - |
+        if command -v brew >/dev/null 2>&1; then
+          brew bundle --file Brewfile
+        else
+          echo "⚠️ brew not found. Run: task brew:bootstrap"
+          exit 1
+        fi
+      - brew bundle --file Brewfile
+
+  brew:update:
+    desc: Update Homebrew packages
+    cmds:
+      - brew update
+      - brew upgrade
+      - brew cleanup
+
+  brew:doctor:
+    desc: Run Homebrew diagnostics
+    cmds:
+      - brew doctor
+
+  mise:install:
+    desc: Install runtimes via mise
+    cmds:
+      - |
+        if command -v mise >/dev/null 2>&1; then
+          mise install
+        else
+          echo "⚠️ mise not installed."
+          exit 1
+        fi
+
+  nvim:sync:
+    desc: Sync Neovim plugins
+    cmds:
+      - nvim --headless "+Lazy! sync" +qa
