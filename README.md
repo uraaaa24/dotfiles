@@ -3,23 +3,30 @@
 Personal notes and quick re-setup steps.
 
 ## Purpose
+
 - Keep setup fast and repeatable
 - Prefer small, clear defaults over heavy customization
 - Make maintenance easy with `task`
 
 ## Overview
+
 - `.config/nvim` Neovim config
+- `.config/git` Git defaults and global ignore
 - `.zshrc` shell config
 - `Brewfile` dependencies
-- `setup.sh` initial setup
+- `Taskfile.yml` task runner
+- `.editorconfig` editor defaults
 
 ## Setup (local)
+
 ```sh
 task setup
 ```
 
 ## Common tasks
+
 ### Task list
+
 - `task setup` Full setup (link + brew + mise)
 - `task link` Link dotfiles
 - `task brew:bootstrap` Install Homebrew if missing
@@ -30,5 +37,6 @@ task setup
 - `task nvim:sync` Sync Neovim plugins
 
 ### Notes
+
 - Reflect new changes here
 - When unsure, re-check the Taskfile

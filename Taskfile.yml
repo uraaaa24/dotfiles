@@ -18,6 +18,7 @@ tasks:
         mkdir -p "$HOME/.config"
         ln -snf "$DOTFILES/.zshrc" "$HOME/.zshrc"
         ln -snf "$DOTFILES/.config/nvim" "$HOME/.config/nvim"
+        ln -snf "$DOTFILES/.config/git" "$HOME/.config/git"
         ln -snf "$DOTFILES/.config/mise" "$HOME/.config/mise"
         ln -snf "$DOTFILES/.config/wezterm" "$HOME/.config/wezterm"
 

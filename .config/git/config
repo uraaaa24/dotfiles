@@ -1,0 +1,37 @@
+[core]
+  excludesfile = ~/.config/git/ignore
+  editor = nvim
+
+[init]
+  defaultBranch = main
+
+[pull]
+  rebase = true
+
+[rebase]
+  autoStash = true
+
+[fetch]
+  prune = true
+
+[push]
+  default = simple
+  autoSetupRemote = true
+
+[diff]
+  algorithm = histogram
+
+[commit]
+  verbose = true
+
+[rerere]
+  enabled = true
+
+[help]
+  autocorrect = 20
+
+[branch]
+  sort = -committerdate
+
+[tag]
+  sort = version:refname
