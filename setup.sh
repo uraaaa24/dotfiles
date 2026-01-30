@@ -7,7 +7,7 @@ DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
 echo "🔗 Linking dotfiles..."
 
 # ---- Link dotfiles ----
-link() {
+link_one() {
   local target=$1
   local link_path=$2
 
@@ -18,11 +18,22 @@ link() {
   echo "  ✔ $link_path → $target"
 }
 
-link "$DOTFILES/.zshrc" "$HOME/.zshrc"
+link_all() {
+  local mapping
+  local target
+  local link_path
 
-link "$DOTFILES/.config/nvim" "$HOME/.config/nvim"
-link "$DOTFILES/.config/mise" "$HOME/.config/mise"
-link "$DOTFILES/.config/wezterm" "$HOME/.config/wezterm"
+  for mapping in "$@"; do
+    IFS='|' read -r target link_path <<<"$mapping"
+    link_one "$target" "$link_path"
+  done
+}
+
+link_all \
+  "$DOTFILES/.zshrc|$HOME/.zshrc" \
+  "$DOTFILES/.config/nvim|$HOME/.config/nvim" \
+  "$DOTFILES/.config/mise|$HOME/.config/mise" \
+  "$DOTFILES/.config/wezterm|$HOME/.config/wezterm"
 
 # ---- Homebrew ----
 echo "🍺 Checking Homebrew..."
@@ -58,7 +69,7 @@ echo "🚀 Installing runtimes via mise..."
 if command -v mise &>/dev/null; then
   mise install
 else
-  echo "⚠️ mise not installed via Brewfile?"
+  echo "⚠️ mise not installed."
 fi
 
 echo "🎉 Setup completed!"
