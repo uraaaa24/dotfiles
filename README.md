@@ -34,6 +34,7 @@ task setup
 - `task brew:update` Update Homebrew packages
 - `task brew:doctor` Run Homebrew diagnostics
 - `task mise:install` Install runtimes via mise
+- `task ai:setup` Install AI CLIs (Copilot, Codex, Gemini)
 - `task nvim:sync` Sync Neovim plugins
 
 ### Notes

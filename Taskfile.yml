@@ -8,6 +8,7 @@ tasks:
       - task: brew:bootstrap
       - task: brew:bundle
       - task: mise:install
+      - task: ai:setup
 
   link:
     desc: Link dotfiles
@@ -76,6 +77,30 @@ tasks:
           echo "⚠️ mise not installed."
           exit 1
         fi
+
+  ai:setup:
+    desc: Install AI CLIs (Copilot, Codex, Gemini)
+    cmds:
+      - |
+        set -euo pipefail
+        if ! command -v npm >/dev/null 2>&1; then
+          echo "⚠️ npm not found. Run: task mise:install"
+          exit 1
+        fi
+
+        if ! command -v copilot >/dev/null 2>&1; then
+          npm install -g @github/copilot
+        fi
+
+        if ! command -v codex >/dev/null 2>&1; then
+          npm install -g @openai/codex
+        fi
+
+        if ! command -v gemini >/dev/null 2>&1; then
+          npm install -g @google/gemini-cli
+        fi
+
+        echo "ℹ️ Next steps: run copilot, codex, gemini and follow login prompts."
 
   nvim:sync:
     desc: Sync Neovim plugins
