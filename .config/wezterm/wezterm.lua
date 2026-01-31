@@ -12,8 +12,13 @@ config.window_decorations = "RESIZE"
 config.initial_rows = 40
 config.initial_cols = 140
 
+-- keybinds
+config.disable_default_key_bindings = true
+config.keys = require("keybinds").keys
+config.key_tables = require("keybinds").key_tables
+config.leader = { key = "q", mods = "CTRL", timeout_milliseconds = 2000 }
 
- wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
    local background = "#5c6d74"
    local foreground = "#FFFFFF"
 
