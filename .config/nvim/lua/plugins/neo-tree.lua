@@ -8,6 +8,9 @@ return {
       "nvim-tree/nvim-web-devicons", -- optional, but recommended
     },
     lazy = false, -- neo-tree will lazily load itself
+    keys = {
+      { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    },
     opts = {
       filesystem = {
         follow_current_file = true, -- This will find and focus the file in the active buffer every time
@@ -30,6 +33,9 @@ return {
       window = {
         position = "left", -- left, right, top, bottom
         width = 30,
+        mappings = {
+          ['\\'] = 'close_window',
+        },
       },
     },
   }
