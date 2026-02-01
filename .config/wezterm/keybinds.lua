@@ -17,8 +17,26 @@ return {
     { key = 'Enter', mods = 'ALT', action = act.ToggleFullScreen },
     { key = '!', mods = 'CTRL', action = act.ActivateTab(0) },
     { key = '!', mods = 'SHIFT|CTRL', action = act.ActivateTab(0) },
-    { key = '\"', mods = 'ALT|CTRL', action = act.SplitVertical{ domain =  'CurrentPaneDomain' } },
-    { key = '\"', mods = 'SHIFT|ALT|CTRL', action = act.SplitVertical{ domain =  'CurrentPaneDomain' } },
+
+    -- Create Pane (leader + r or d)
+    { key = "d", mods = "LEADER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
+    { key = "r", mods = "LEADER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+
+    -- Close Pane (leader + x)
+    { key = "x", mods = "LEADER", action = act.CloseCurrentPane({ confirm = true }) },
+
+    -- Move between Panes (leader + h/j/k/l)
+    { key = "h", mods = "LEADER", action = act.ActivatePaneDirection("Left") },
+    { key = "j", mods = "LEADER", action = act.ActivatePaneDirection("Down") },
+    { key = "k", mods = "LEADER", action = act.ActivatePaneDirection("Up") },
+    { key = "l", mods = "LEADER", action = act.ActivatePaneDirection("Right") },
+
+    -- Select Pane
+    { key = "[", mods = "CTRL|SHIFT", action = act.PaneSelect },
+
+    -- Display only selecting Panes
+    { key = "z", mods = "LEADER", action = act.TogglePaneZoomState },
+
     { key = '#', mods = 'CTRL', action = act.ActivateTab(2) },
     { key = '#', mods = 'SHIFT|CTRL', action = act.ActivateTab(2) },
     { key = '$', mods = 'CTRL', action = act.ActivateTab(3) },
@@ -36,33 +54,25 @@ return {
     { key = ')', mods = 'SHIFT|CTRL', action = act.ResetFontSize },
     { key = '*', mods = 'CTRL', action = act.ActivateTab(7) },
     { key = '*', mods = 'SHIFT|CTRL', action = act.ActivateTab(7) },
+
+    -- Adjust font size
     { key = '+', mods = 'CTRL', action = act.IncreaseFontSize },
-    { key = '+', mods = 'SHIFT|CTRL', action = act.IncreaseFontSize },
     { key = '-', mods = 'CTRL', action = act.DecreaseFontSize },
-    { key = '-', mods = 'SHIFT|CTRL', action = act.DecreaseFontSize },
-    { key = '-', mods = 'SUPER', action = act.DecreaseFontSize },
-    { key = '0', mods = 'CTRL', action = act.ResetFontSize },
-    { key = '0', mods = 'SHIFT|CTRL', action = act.ResetFontSize },
+
+    -- Reset font size
     { key = '0', mods = 'SUPER', action = act.ResetFontSize },
-    { key = '1', mods = 'SHIFT|CTRL', action = act.ActivateTab(0) },
+
+    -- Tab switching
     { key = '1', mods = 'SUPER', action = act.ActivateTab(0) },
-    { key = '2', mods = 'SHIFT|CTRL', action = act.ActivateTab(1) },
     { key = '2', mods = 'SUPER', action = act.ActivateTab(1) },
-    { key = '3', mods = 'SHIFT|CTRL', action = act.ActivateTab(2) },
     { key = '3', mods = 'SUPER', action = act.ActivateTab(2) },
-    { key = '4', mods = 'SHIFT|CTRL', action = act.ActivateTab(3) },
     { key = '4', mods = 'SUPER', action = act.ActivateTab(3) },
-    { key = '5', mods = 'SHIFT|CTRL', action = act.ActivateTab(4) },
-    { key = '5', mods = 'SHIFT|ALT|CTRL', action = act.SplitHorizontal{ domain =  'CurrentPaneDomain' } },
     { key = '5', mods = 'SUPER', action = act.ActivateTab(4) },
-    { key = '6', mods = 'SHIFT|CTRL', action = act.ActivateTab(5) },
     { key = '6', mods = 'SUPER', action = act.ActivateTab(5) },
-    { key = '7', mods = 'SHIFT|CTRL', action = act.ActivateTab(6) },
     { key = '7', mods = 'SUPER', action = act.ActivateTab(6) },
-    { key = '8', mods = 'SHIFT|CTRL', action = act.ActivateTab(7) },
     { key = '8', mods = 'SUPER', action = act.ActivateTab(7) },
-    { key = '9', mods = 'SHIFT|CTRL', action = act.ActivateTab(-1) },
     { key = '9', mods = 'SUPER', action = act.ActivateTab(-1) },
+
     { key = '=', mods = 'CTRL', action = act.IncreaseFontSize },
     { key = '=', mods = 'SHIFT|CTRL', action = act.IncreaseFontSize },
     { key = '=', mods = 'SUPER', action = act.IncreaseFontSize },
