@@ -52,12 +52,9 @@ require("lazy").setup({
   },
 })
 
--- colorscheme
-vim.cmd.colorscheme "catppuccin-macchiato"
-
 -- options
 local opt = vim.opt
 
 opt.number = true
-opt.relativenumber = false
+opt.relativenumber = true
 opt.cursorline = true
