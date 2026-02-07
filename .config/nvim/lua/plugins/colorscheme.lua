@@ -27,7 +27,7 @@ return {
           CursorLine = { bg = "#2a2a2a" },
 
           -- make visual selection more prominent
-          Visual = { bg = "#3a3a3a", underline = true },
+          Visual = { bg = "#3a3a3a" },
         }
       end,
     })
