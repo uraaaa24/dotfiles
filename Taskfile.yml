@@ -17,11 +17,29 @@ tasks:
         set -euo pipefail
         DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
         mkdir -p "$HOME/.config"
-        ln -snf "$DOTFILES/.zshrc" "$HOME/.zshrc"
-        ln -snf "$DOTFILES/.config/nvim" "$HOME/.config/nvim"
-        ln -snf "$DOTFILES/.config/git" "$HOME/.config/git"
-        ln -snf "$DOTFILES/.config/mise" "$HOME/.config/mise"
-        ln -snf "$DOTFILES/.config/wezterm" "$HOME/.config/wezterm"
+
+        link_path() {
+          src="$1"
+          dst="$2"
+
+          if [ -L "$dst" ] || [ ! -e "$dst" ]; then
+            ln -snf "$src" "$dst"
+            return
+          fi
+
+          backup="$dst.backup.$(date +%Y%m%d%H%M%S)"
+          mv "$dst" "$backup"
+          ln -snf "$src" "$dst"
+          echo "Backed up existing $dst to $backup"
+        }
+
+        link_path "$DOTFILES/.zshrc" "$HOME/.zshrc"
+        link_path "$DOTFILES/.config/nvim" "$HOME/.config/nvim"
+        link_path "$DOTFILES/.config/git" "$HOME/.config/git"
+        link_path "$DOTFILES/.config/mise" "$HOME/.config/mise"
+        link_path "$DOTFILES/.config/wezterm" "$HOME/.config/wezterm"
+        link_path "$DOTFILES/.config/ghostty" "$HOME/.config/ghostty"
+        link_path "$DOTFILES/.config/tmux" "$HOME/.config/tmux"
 
   brew:bootstrap:
     desc: Install Homebrew if missing
@@ -47,13 +65,13 @@ tasks:
     desc: Install packages from Brewfile
     cmds:
       - |
+        set -euo pipefail
         if command -v brew >/dev/null 2>&1; then
-          brew bundle --file Brewfile
+          HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle --file Brewfile
         else
           echo "⚠️ brew not found. Run: task brew:bootstrap"
           exit 1
         fi
-      - brew bundle --file Brewfile
 
   brew:update:
     desc: Update Homebrew packages

@@ -1,0 +1,42 @@
+# ~/.config/ghostty/config
+
+# Keep Ghostty colors close to the existing WezTerm setup.
+background = 181616
+foreground = c5c9c5
+
+font-size = 14
+# 内蔵フォントなら未指定でOK。変えたい時だけ
+# font-family = "BlexMono Nerd Font Mono"
+font-feature = -dlig
+
+window-padding-x = 8
+window-padding-y = 8
+
+# Semi-transparent, but dark enough for Neovim's transparent background.
+background-opacity = 0.80
+background-blur-radius = 20
+adjust-cell-height = 10%
+
+macos-titlebar-style = transparent
+macos-window-shadow = true
+# 入力中はマウスカーソルを隠す
+mouse-hide-while-typing = true
+
+# クイックターミナル（⌘+` でどこからでもドロップダウン表示。詳細は §7）
+keybind = global:cmd+grave_accent=toggle_quick_terminal
+quick-terminal-position = top
+quick-terminal-screen = mouse
+quick-terminal-animation-duration = 0.1
+quick-terminal-size = 80%,100%
+quick-terminal-autohide = true
+# 起動時に通常ウィンドウを開かない（クイックターミナル主体の運用向け）
+initial-window = false
+
+# Keep Ghostty's native terminfo so tmux can detect color capabilities correctly.
+term = xterm-ghostty
+
+# tmux/Neovim で Alt+... 系キーを使うなら有効化
+# macos-option-as-alt = true
+
+# Shift+Enterで改行（複数行入力用）
+keybind = shift+enter=text:\n

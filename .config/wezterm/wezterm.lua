@@ -3,6 +3,10 @@ local config = wezterm.config_builder()
 
 config.automatically_reload_config = true
 config.color_scheme = 'Kanagawa (Gogh)'
+config.font = wezterm.font_with_fallback({
+  "HackGen Console NF",
+  "Hack Nerd Font",
+})
 config.font_size = 12.0
 config.use_ime = true
 config.window_background_opacity = 0.85
@@ -17,7 +21,6 @@ config.initial_cols = 140
 config.disable_default_key_bindings = true
 config.keys = require("keybinds").keys
 config.key_tables = require("keybinds").key_tables
-config.leader = { key = "q", mods = "CTRL", timeout_milliseconds = 2000 }
 
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
    local background = "#5c6d74"

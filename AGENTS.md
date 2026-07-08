@@ -5,7 +5,7 @@ This repo is a dotfiles collection. Most configuration lives at the root or in `
 
 - Root: `Brewfile`, `Taskfile.yml`, `README.md`, `.editorconfig`, `.gitconfig`, `.zshrc`, `.czrc`.
 - Neovim: `.config/nvim/` with `init.lua`, `lua/` modules, `lazy-lock.json`, and `stylua.toml`.
-- Other configs: `.config/git/`, `.config/mise/`, `.config/wezterm/`.
+- Other configs: `.config/git/`, `.config/mise/`, `.config/tmux/`, `.config/wezterm/`.
 
 ## Build, Test, and Development Commands
 Use `task` for setup and maintenance.
@@ -23,6 +23,17 @@ Use `task` for setup and maintenance.
 - `.editorconfig` enforces 2-space indentation, LF line endings, and trimmed trailing whitespace (except Markdown).
 - Lua formatting uses `stylua` with 2-space indentation and 120 column width (see `.config/nvim/stylua.toml`).
 - Keep paths and filenames lowercase and consistent with existing structure (e.g., `.config/nvim/lua/...`).
+
+## Documentation Requirements
+When changing any configuration behavior, update the relevant README in the same change.
+
+- Root setup, Homebrew, mise, or task changes: update `README.md`.
+- Neovim behavior, plugins, keymaps, leader keys, UI, LSP, formatting, or Git integration: update `.config/nvim/README.md`.
+- Ghostty behavior, appearance, tabs, splits, or keybindings: update `.config/ghostty/README.md`.
+- tmux behavior, prefix keys, panes, sessions, or window changes: update `README.md` and any tmux-specific documentation.
+- WezTerm behavior, appearance, tabs, splits, or keybindings: update or add the relevant WezTerm documentation.
+
+Do not leave configuration changes undocumented unless the change is purely internal cleanup with no user-visible behavior change.
 
 ## Testing Guidelines
 There are no automated tests in this repo. Validate changes by running the relevant task and opening the app:

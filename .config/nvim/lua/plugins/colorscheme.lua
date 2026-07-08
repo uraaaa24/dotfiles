@@ -3,21 +3,21 @@ return {
   name = "kanagawa",
   config = function()
     require("kanagawa").setup({
-      transparent = true, -- terminal (wezterm) handles background transparency
+      transparent = true,
       colors = {
         theme = {
           dragon = {
-            ui = { bg_gutter = "none" }, -- keep gutter transparent
+            ui = { bg_gutter = "none" },
           },
         },
       },
       overrides = function(colors)
-        local p = colors.palette
         return {
-          -- fully transparent backgrounds
-          Normal     = { bg = "none" },
-          NormalNC   = { bg = "none" },
+          Normal = { bg = "none" },
+          NormalNC = { bg = "none" },
           SignColumn = { bg = "none" },
+          NeoTreeNormal = { bg = "none" },
+          NeoTreeNormalNC = { bg = "none" },
 
           -- line number colors
           LineNr       = { fg = "#727169" },
@@ -35,4 +35,3 @@ return {
     vim.cmd.colorscheme("kanagawa-dragon")
   end,
 }
-
