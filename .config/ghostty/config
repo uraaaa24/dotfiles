@@ -1,18 +1,15 @@
-# ~/.config/ghostty/config
+# Theme
+theme = "Kanagawa Dragon"
 
-# Keep Ghostty colors close to the existing WezTerm setup.
-background = 181616
-foreground = c5c9c5
-
-font-size = 14
-# 内蔵フォントなら未指定でOK。変えたい時だけ
+# Font
+font-size = 16
+adjust-cell-height = 10%
 # font-family = "BlexMono Nerd Font Mono"
-font-feature = -dlig
 
 window-padding-x = 8
 window-padding-y = 8
+window-padding-balance = true
 
-# Semi-transparent, but dark enough for Neovim's transparent background.
 background-opacity = 0.80
 background-blur-radius = 20
 adjust-cell-height = 10%
@@ -21,6 +18,10 @@ macos-titlebar-style = transparent
 macos-window-shadow = true
 # 入力中はマウスカーソルを隠す
 mouse-hide-while-typing = true
+
+copy-on-select = true
+clipboard-read = allow
+clipboard-write = allow
 
 # クイックターミナル（⌘+` でどこからでもドロップダウン表示。詳細は §7）
 keybind = global:cmd+grave_accent=toggle_quick_terminal
@@ -40,3 +41,7 @@ term = xterm-ghostty
 
 # Shift+Enterで改行（複数行入力用）
 keybind = shift+enter=text:\n
+
+# Native splits for when tmux is not running.
+keybind = cmd+d=new_split:right
+keybind = cmd+shift+d=new_split:down

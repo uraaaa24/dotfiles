@@ -4,9 +4,8 @@ Personal WezTerm shortcut reference.
 
 ## Role
 
-WezTerm is used as a terminal host only.
-Pane splitting is delegated to tmux so the same workspace can be restored from Ghostty or WezTerm.
-Open WezTerm, start tmux manually with `tmux new -A -s main`, then use tmux for panes:
+WezTerm can host native panes when tmux is not running.
+For persistent sessions, start tmux manually with `tmux new -A -s main`, then use tmux for panes:
 
 | Key | Action |
 | --- | --- |
@@ -20,6 +19,13 @@ Open WezTerm, start tmux manually with `tmux new -A -s main`, then use tmux for 
 | `Ctrl-q x` | Close pane |
 | `Ctrl-q D` | Detach |
 
+When tmux is not running, WezTerm uses native pane splits with matching directions:
+
+| Key | Action |
+| --- | --- |
+| `Cmd-d` | Split right |
+| `Cmd-Shift-d` | Split down |
+
 ## WezTerm Shortcuts
 
 | Key | Action |
@@ -28,5 +34,7 @@ Open WezTerm, start tmux manually with `tmux new -A -s main`, then use tmux for 
 | `Cmd-t` | New tab |
 | `Cmd-w` | Close tab |
 | `Cmd-n` | New window |
+| `Cmd-d` | Split right |
+| `Cmd-Shift-d` | Split down |
 | `Cmd-r` | Reload config |
 | `Alt-Enter` | Toggle fullscreen |

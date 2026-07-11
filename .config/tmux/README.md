@@ -14,22 +14,22 @@ tmux new -A -s main
 
 The tmux prefix is `Ctrl-q`.
 
-| Key | Action |
-| --- | --- |
-| `Ctrl-q r` | Split right |
-| `Ctrl-q d` | Split down |
-| `Ctrl-q h` | Move to left pane |
-| `Ctrl-q j` | Move to lower pane |
-| `Ctrl-q k` | Move to upper pane |
-| `Ctrl-q l` | Move to right pane |
-| `Ctrl-q z` | Toggle pane zoom |
-| `Ctrl-q x` | Close pane |
-| `Ctrl-q c` | New window |
-| `Ctrl-q n` | Next window |
-| `Ctrl-q p` | Previous window |
+| Key        | Action                           |
+| ---------- | -------------------------------- |
+| `Ctrl-q r` | Split right                      |
+| `Ctrl-q d` | Split down                       |
+| `Ctrl-q h` | Move to left pane                |
+| `Ctrl-q j` | Move to lower pane               |
+| `Ctrl-q k` | Move to upper pane               |
+| `Ctrl-q l` | Move to right pane               |
+| `Ctrl-q z` | Toggle pane zoom                 |
+| `Ctrl-q x` | Close pane                       |
+| `Ctrl-q c` | New window                       |
+| `Ctrl-q n` | Next window                      |
+| `Ctrl-q p` | Previous window                  |
 | `Ctrl-q s` | Session, window, and pane picker |
-| `Ctrl-q D` | Detach |
-| `Ctrl-q R` | Reload config |
+| `Ctrl-q D` | Detach                           |
+| `Ctrl-q R` | Reload config                    |
 
 New panes and windows inherit the current pane's working directory.
 The tmux status line is disabled; Ghostty or WezTerm owns colors, opacity, blur, fonts, and other appearance settings.

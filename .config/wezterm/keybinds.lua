@@ -51,6 +51,10 @@ return {
     { key = '8', mods = 'SUPER', action = act.ActivateTab(7) },
     { key = '9', mods = 'SUPER', action = act.ActivateTab(-1) },
 
+    -- Native splits for when tmux is not running
+    { key = 'd', mods = 'SUPER', action = act.SplitPane { direction = 'Right', size = { Percent = 50 } } },
+    { key = 'd', mods = 'SHIFT|SUPER', action = act.SplitPane { direction = 'Down', size = { Percent = 50 } } },
+
     { key = '=', mods = 'CTRL', action = act.IncreaseFontSize },
     { key = '=', mods = 'SHIFT|CTRL', action = act.IncreaseFontSize },
     { key = '=', mods = 'SUPER', action = act.IncreaseFontSize },
