@@ -28,7 +28,7 @@ return {
         "vue_ls",
         "yamlls",
       },
-      automatic_installation = true,
+      automatic_enable = false,
     })
   end,
 }

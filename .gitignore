@@ -25,6 +25,9 @@ node_modules
 bower_components
 fishd.*
 
+# lazygit
+.config/lazygit/state.yml
+
 # nvim
 .config/nvim/lazy-lock.json
 .config/nvim/lazyvim.json
