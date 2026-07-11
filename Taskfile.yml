@@ -5,41 +5,182 @@ tasks:
     desc: Initial setup
     cmds:
       - task: link
+      - task: check
       - task: brew:bootstrap
       - task: brew:bundle
       - task: mise:install
       - task: ai:setup
 
   link:
-    desc: Link dotfiles
+    desc: Link dotfiles into $HOME
+    silent: true
     cmds:
       - |
         set -euo pipefail
-        DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
-        mkdir -p "$HOME/.config"
+
+        repo_root="$(pwd)"
+        home_dir="${HOME:?HOME is required}"
+        config_home="${XDG_CONFIG_HOME:-$home_dir/.config}"
+        timestamp="$(date +%Y%m%d%H%M%S)"
+        dry_run="${DRY_RUN:-0}"
+
+        run() {
+          if [[ "$dry_run" == "1" ]]; then
+            echo "[dry-run] $*"
+            return
+          fi
+
+          "$@"
+        }
+
+        backup_path() {
+          dst="$1"
+          backup="$dst.backup.$timestamp"
+
+          run mv "$dst" "$backup"
+          echo "Backed up $dst to $backup"
+        }
 
         link_path() {
           src="$1"
           dst="$2"
 
-          if [ -L "$dst" ] || [ ! -e "$dst" ]; then
-            ln -snf "$src" "$dst"
-            return
+          if [[ ! -e "$src" ]]; then
+            echo "Missing source: $src"
+            exit 1
           fi
 
-          backup="$dst.backup.$(date +%Y%m%d%H%M%S)"
-          mv "$dst" "$backup"
-          ln -snf "$src" "$dst"
-          echo "Backed up existing $dst to $backup"
+          run mkdir -p "$(dirname "$dst")"
+
+          if [[ -L "$dst" ]]; then
+            current="$(readlink "$dst")"
+            if [[ "$current" == "$src" ]]; then
+              echo "Already linked: $dst -> $src"
+              return
+            fi
+            backup_path "$dst"
+          elif [[ -e "$dst" ]]; then
+            backup_path "$dst"
+          fi
+
+          run ln -sfn "$src" "$dst"
+          echo "Linked: $dst -> $src"
         }
 
-        link_path "$DOTFILES/.zshrc" "$HOME/.zshrc"
-        link_path "$DOTFILES/.config/nvim" "$HOME/.config/nvim"
-        link_path "$DOTFILES/.config/git" "$HOME/.config/git"
-        link_path "$DOTFILES/.config/mise" "$HOME/.config/mise"
-        link_path "$DOTFILES/.config/wezterm" "$HOME/.config/wezterm"
-        link_path "$DOTFILES/.config/ghostty" "$HOME/.config/ghostty"
-        link_path "$DOTFILES/.config/tmux" "$HOME/.config/tmux"
+        link_path "$repo_root/.config/zsh/.zshrc" "$home_dir/.zshrc"
+        link_path "$repo_root/.config/zsh/.p10k.zsh" "$home_dir/.p10k.zsh"
+        link_path "$repo_root/.editorconfig" "$home_dir/.editorconfig"
+        link_path "$repo_root/.config/git" "$config_home/git"
+        link_path "$repo_root/.config/ghostty" "$config_home/ghostty"
+        link_path "$repo_root/.config/lazygit" "$home_dir/Library/Application Support/lazygit"
+        link_path "$repo_root/Brewfile" "$home_dir/.Brewfile"
+        link_path "$repo_root/.config/mise" "$config_home/mise"
+        link_path "$repo_root/.config/nvim" "$config_home/nvim"
+        link_path "$repo_root/.config/tmux" "$config_home/tmux"
+        link_path "$repo_root/.config/wezterm" "$config_home/wezterm"
+
+  link:dry-run:
+    desc: Preview dotfile symlinks without changing $HOME
+    cmds:
+      - DRY_RUN=1 task link
+
+  check:
+    desc: Run lightweight repository checks
+    silent: true
+    cmds:
+      - |
+        set -euo pipefail
+
+        required_paths=(
+          ".config/git/config"
+          ".config/git/ignore"
+          ".config/ghostty/config"
+          ".config/lazygit/config.yml"
+          ".config/mise/config.toml"
+          ".config/nvim/init.lua"
+          ".config/tmux/tmux.conf"
+          ".config/wezterm/wezterm.lua"
+          ".config/zsh/.p10k.zsh"
+          ".config/zsh/.zshrc"
+          ".editorconfig"
+          "Brewfile"
+          "README.md"
+          "Taskfile.yml"
+        )
+
+        missing=0
+        for path in "${required_paths[@]}"; do
+          if [[ ! -e "$path" ]]; then
+            echo "Missing required path: $path"
+            missing=1
+          fi
+        done
+
+        if [[ "$missing" != "0" ]]; then
+          exit 1
+        fi
+
+        task --list >/dev/null
+
+        zsh -n .config/zsh/.zshrc
+
+        if command -v mise >/dev/null 2>&1; then
+          mise config >/dev/null
+        fi
+
+        if command -v stylua >/dev/null 2>&1; then
+          stylua --check .config/nvim
+        fi
+
+        if command -v wezterm >/dev/null 2>&1; then
+          wezterm --config-file .config/wezterm/wezterm.lua show-keys --lua >/dev/null
+        fi
+
+        if command -v ghostty >/dev/null 2>&1; then
+          ghostty_output="$(ghostty +validate-config 2>&1 >/dev/null)" || {
+            echo "$ghostty_output"
+            exit 1
+          }
+        fi
+
+        echo "dotfiles check passed"
+
+  doctor:
+    desc: Show local development environment status
+    silent: true
+    cmds:
+      - |
+        set -euo pipefail
+
+        echo "System"
+        sw_vers 2>/dev/null || true
+        uname -m
+        echo
+
+        echo "Homebrew"
+        if command -v brew >/dev/null 2>&1; then
+          brew --prefix
+        else
+          echo "brew: not installed"
+        fi
+        echo
+
+        echo "Runtimes"
+        if command -v mise >/dev/null 2>&1; then
+          mise current 2>/dev/null || mise config
+        else
+          echo "mise: not installed"
+        fi
+        echo
+
+        echo "Tools"
+        for cmd in git gh nvim tmux ghostty wezterm colima docker direnv pre-commit lazygit; do
+          if command -v "$cmd" >/dev/null 2>&1; then
+            printf "%-12s %s\n" "$cmd" "$(command -v "$cmd")"
+          else
+            printf "%-12s %s\n" "$cmd" "missing"
+          fi
+        done
 
   brew:bootstrap:
     desc: Install Homebrew if missing

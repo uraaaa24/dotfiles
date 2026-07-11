@@ -1,17 +1,22 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-This repo is a dotfiles collection. Most configuration lives at the root or in `.config`.
+This repo is a dotfiles collection. Configuration bodies live under `.config`.
 
-- Root: `Brewfile`, `Taskfile.yml`, `README.md`, `.editorconfig`, `.gitconfig`, `.zshrc`, `.czrc`.
+- Root: `Taskfile.yml`, `README.md`, `AGENTS.md`, and repository metadata.
+- Shell and prompt: `.config/zsh/` with `.zshrc` and `.p10k.zsh`.
+- Homebrew: `Brewfile`.
+- Editor defaults: `.editorconfig`.
 - Neovim: `.config/nvim/` with `init.lua`, `lua/` modules, `lazy-lock.json`, and `stylua.toml`.
-- Other configs: `.config/git/`, `.config/mise/`, `.config/tmux/`, `.config/wezterm/`.
+- Other configs: `.config/git/`, `.config/ghostty/`, `.config/mise/`, `.config/tmux/`, `.config/wezterm/`.
 
 ## Build, Test, and Development Commands
 Use `task` for setup and maintenance.
 
-- `task setup`: full setup (link + Homebrew + mise).
+- `task setup`: full setup (link + check + Homebrew + mise).
 - `task link`: symlink dotfiles into `$HOME`.
+- `task link:dry-run`: preview symlink changes without modifying `$HOME`.
+- `task check`: run lightweight repository checks.
 - `task brew:bootstrap`: install Homebrew if missing.
 - `task brew:bundle`: install packages from `Brewfile`.
 - `task brew:update`: update Homebrew packages.
@@ -50,4 +55,4 @@ For PRs, keep changes focused and include:
 - Screenshots only when UI changes are visible (e.g., WezTerm appearance).
 
 ## Configuration & Safety Notes
-`task link` overwrites symlinks in `$HOME`. Review changes before running, or set `DOTFILES` to point at an alternate location.
+`task link` backs up existing non-matching paths next to the original as `<path>.backup.<timestamp>` before replacing them with symlinks. Review changes with `task link:dry-run` before running it.
