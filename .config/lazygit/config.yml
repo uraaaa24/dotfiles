@@ -1,0 +1,6 @@
+gui:
+  theme:
+    selectedLineBgColor:
+      - "#2a2a2a"
+    inactiveViewSelectedLineBgColor:
+      - "#242424"

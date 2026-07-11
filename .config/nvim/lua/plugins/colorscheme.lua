@@ -20,7 +20,7 @@ return {
           NeoTreeNormalNC = { bg = "none" },
 
           -- line number colors
-          LineNr       = { fg = "#727169" },
+          LineNr = { fg = "#727169" },
           CursorLineNr = { fg = "#e6c384" },
 
           -- cursor line and visual selection

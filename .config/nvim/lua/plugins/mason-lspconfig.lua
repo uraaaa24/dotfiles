@@ -7,6 +7,11 @@ return {
   config = function()
     require("mason-lspconfig").setup({
       ensure_installed = {
+        "astro",
+        "bashls",
+        "css_variables",
+        "cssmodules_ls",
+        "dockerls",
         "lua_ls",
         "gopls",
         "pyright",
@@ -18,6 +23,10 @@ return {
         "jsonls",
         "tailwindcss",
         "emmet_language_server",
+        "terraformls",
+        "svelte",
+        "vue_ls",
+        "yamlls",
       },
       automatic_installation = true,
     })
