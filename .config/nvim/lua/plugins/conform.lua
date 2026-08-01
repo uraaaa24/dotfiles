@@ -19,6 +19,13 @@ local biome_files = {
   "biome.jsonc",
 }
 
+local oxfmt_files = {
+  ".oxfmtrc.json",
+  ".oxfmtrc.jsonc",
+  "oxfmt.config.ts",
+  "oxfmt.config.mts",
+}
+
 local eslint_files = {
   "eslint.config.js",
   "eslint.config.mjs",
@@ -68,6 +75,10 @@ local function has_biome_config(bufnr)
   return has_file(bufnr, biome_files)
 end
 
+local function has_oxfmt_config(bufnr)
+  return has_file(bufnr, oxfmt_files)
+end
+
 local function has_eslint_config(bufnr)
   return has_file(bufnr, eslint_files) or package_json_has(bufnr, "eslintConfig")
 end
@@ -81,11 +92,13 @@ local function first_available(bufnr, ...)
   end
 end
 
-local function prettier_or_biome_formatters(bufnr)
+local function web_formatters(bufnr)
   local formatters = {}
 
   if has_biome_config(bufnr) then
     table.insert(formatters, "biome")
+  elseif has_oxfmt_config(bufnr) then
+    table.insert(formatters, "oxfmt")
   elseif has_prettier_config(bufnr) then
     local prettier = first_available(bufnr, "prettier", "prettierd")
     if prettier then
@@ -99,9 +112,11 @@ end
 local function json_formatters(bufnr)
   if has_biome_config(bufnr) then
     return { "biome" }
+  elseif has_oxfmt_config(bufnr) then
+    return { "oxfmt" }
   end
 
-  local prettier = first_available(bufnr, "prettier", "prettierd", "biome")
+  local prettier = first_available(bufnr, "prettier", "prettierd", "oxfmt", "biome")
   return prettier and { prettier } or {}
 end
 
@@ -112,7 +127,7 @@ local function script_formatters(bufnr)
     table.insert(formatters, "eslint_d")
   end
 
-  vim.list_extend(formatters, prettier_or_biome_formatters(bufnr))
+  vim.list_extend(formatters, web_formatters(bufnr))
   return formatters
 end
 
@@ -130,6 +145,7 @@ local function configured_format_on_save(bufnr)
     "json",
     "jsonc",
     "lua",
+    "rust",
     "toml",
   }, ft) then
     has_config = true
@@ -144,9 +160,12 @@ local function configured_format_on_save(bufnr)
       "vue",
     }, ft)
   then
-    has_config = has_eslint_config(bufnr) or has_biome_config(bufnr) or has_prettier_config(bufnr)
+    has_config = has_eslint_config(bufnr)
+      or has_biome_config(bufnr)
+      or has_oxfmt_config(bufnr)
+      or has_prettier_config(bufnr)
   elseif vim.tbl_contains({ "css", "html", "scss" }, ft) then
-    has_config = has_biome_config(bufnr) or has_prettier_config(bufnr)
+    has_config = has_biome_config(bufnr) or has_oxfmt_config(bufnr) or has_prettier_config(bufnr)
   elseif ft == "yaml" then
     has_config = has_prettier_config(bufnr)
   end
@@ -167,8 +186,8 @@ return {
   opts = {
     formatters_by_ft = {
       astro = script_formatters,
-      css = prettier_or_biome_formatters,
-      html = prettier_or_biome_formatters,
+      css = web_formatters,
+      html = web_formatters,
       javascript = script_formatters,
       javascriptreact = script_formatters,
       json = json_formatters,
@@ -177,7 +196,10 @@ return {
         return { "stylua" }
       end,
       markdown = prettier_formatters,
-      scss = prettier_or_biome_formatters,
+      rust = function()
+        return { "rustfmt" }
+      end,
+      scss = web_formatters,
       svelte = script_formatters,
       toml = function()
         return { "taplo" }

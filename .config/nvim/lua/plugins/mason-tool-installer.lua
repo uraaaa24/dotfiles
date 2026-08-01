@@ -8,6 +8,7 @@ return {
       "delve",
       "eslint_d",
       "js-debug-adapter",
+      "oxfmt",
       "prettier",
       "prettierd",
       "shellcheck",

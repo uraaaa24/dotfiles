@@ -241,8 +241,9 @@ shell や開発サーバーを並べたいときは、tmux の `Ctrl-q r` や `C
 
 ## フォーマット
 
-保存時の自動フォーマットは、Markdown / JSON / JSONC / Lua / TOML は常に動きます。
+保存時の自動フォーマットは、Markdown / JSON / JSONC / Lua / Rust / TOML は常に動きます。
 これらはプロジェクト側に設定があればその formatter の設定を使い、なければ dotfiles の既定値を使います。
+Rust は `rustup` の `rustfmt` を使うため、プロジェクトの `rust-toolchain.toml` で固定されたtoolchainが反映されます。
 それ以外は、プロジェクト側に formatter / linter 設定がある場合だけ動きます。
 設定が見つからない場所では、上記以外は保存時に何もしません。
 
@@ -251,22 +252,27 @@ Conform を使い、ファイル種別ごとに次の formatter / fixer を使�
 
 | 種別                                 | Formatter                                    |
 | ------------------------------------ | -------------------------------------------- |
-| JavaScript / TypeScript / CSS / HTML | `eslint_d`, `biome`, `prettier`, `prettierd` |
-| JSON / JSONC                         | `biome`, `prettier`, `prettierd`             |
+| JavaScript / TypeScript / CSS / HTML | `eslint_d`, `oxfmt`, `biome`, `prettier`, `prettierd` |
+| JSON / JSONC                         | `oxfmt`, `biome`, `prettier`, `prettierd`             |
 | Markdown                             | `prettier`, `prettierd`                      |
 | Lua                                  | `stylua`                                     |
+| Rust                                 | `rustfmt`                                    |
 | TOML                                 | `taplo`                                      |
 | YAML                                 | `prettier`, `prettierd`                      |
 
-Mason は `biome`, `eslint_d`, `prettier`, `prettierd`, `shellcheck`, `shfmt`, `stylua`, `taplo` を同期対象にします。
+Mason は `biome`, `eslint_d`, `oxfmt`, `prettier`, `prettierd`, `shellcheck`, `shfmt`, `stylua`, `taplo` を同期対象にします。
 Tailwind class sorting, Stylelint, HTMLHint などは dotfiles 側では標準化しません。
 プロジェクトに Prettier plugin や lint 設定がある場合は、プロジェクト側の formatter / linter として動かします。
+
+Oxlint は lint とその自動修正を担当し、コードの字下げや改行などの整形は Oxfmt が担当します。
+Oxlint の `--fix` はプロジェクト側の lint コマンドで実行し、保存時フォーマットには Oxfmt を使います。
 
 保存時フォーマットを有効化する設定ファイルの例です。
 
 | 対象       | 設定                                                              |
 | ---------- | ----------------------------------------------------------------- |
 | Biome      | `biome.json`, `biome.jsonc`                                       |
+| Oxfmt      | `.oxfmtrc.json`, `.oxfmtrc.jsonc`, `oxfmt.config.ts`, `oxfmt.config.mts` |
 | Prettier   | `.prettierrc*`, `prettier.config.*`, `package.json` の `prettier` |
 | ESLint fix | `eslint.config.*`, `.eslintrc*`, `package.json` の `eslintConfig` |
 
