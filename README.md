@@ -11,6 +11,7 @@ Personal notes and quick re-setup steps.
 ## Overview
 
 - `.config/git` Git defaults and global ignore
+- `.config/ai/AGENTS.md` shared personal instructions for Codex and Claude Code
 - `.config/ghostty` Ghostty config
 - `.config/lazygit` LazyGit config
 - `.config/mise` mise runtime defaults
@@ -65,6 +66,28 @@ For example:
 ```sh
 ~/.config/example.backup.<timestamp>
 ```
+
+## Shared AI Instructions
+
+Personal AI instructions live in `.config/ai/AGENTS.md`. `task link` exposes the same file to both clients:
+
+```text
+~/.codex/AGENTS.md -> ~/.dotfiles/.config/ai/AGENTS.md
+~/.claude/CLAUDE.md -> ~/.dotfiles/.config/ai/AGENTS.md
+```
+
+The instructions use the Obsidian CLI to search and update the local Vault. They include a compact map of the current Vault folders, an example of the Daily format, baseline YAML properties for new notes, and folder-specific filename conventions. Markdown notes use their filenames as titles and begin body sections at H2. Daily notes are chronological worklogs where each activity uses a time-stamped H2 heading. Concrete relationships use wikilinks, while tags are reserved for stable cross-note classification. Longer investigations live under `04_Thinking/`, durable knowledge is integrated into existing topic notes, and automatically maintained indexes use Obsidian Bases. Vault reads and writes are reported explicitly, and relevant verification is completed as part of the task.
+
+Agent Skills live under `.config/ai/skills`. `task link` discovers every directory containing `SKILL.md` and links it to both clients automatically:
+
+```text
+~/.codex/skills/<skill-name> -> ~/.dotfiles/.config/ai/skills/<skill-name>
+~/.claude/skills/<skill-name> -> ~/.dotfiles/.config/ai/skills/<skill-name>
+```
+
+Adding another Skill does not require changing `Taskfile.yml`. The personal workflow remains in `AGENTS.md`; Skills provide task-specific guidance only.
+
+`obsidian-project-log` records meaningful repository work under `02_Projects/<project>/logs/YYYY-MM-DD.md`, which acts as the project-specific Daily note. Repository work is not duplicated in the global Daily. Project logs use wikilinks for concrete relationships and tags only for stable classification. The Skill derives a safe project name locally without writing remote URLs or organization names to the Vault, so the same workflow can be used for personal and business repositories.
 
 `task check` validates required config paths, Taskfile readability, zsh syntax, mise config readability, and optional app checks when the tools are installed:
 `stylua --check .config/nvim`, WezTerm key binding validation, and Ghostty config validation.
