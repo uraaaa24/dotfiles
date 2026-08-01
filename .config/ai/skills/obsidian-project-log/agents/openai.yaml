@@ -1,0 +1,4 @@
+interface:
+  display_name: "Obsidian Project Log"
+  short_description: "Gitリポジトリ別の開発日誌をObsidianへ記録"
+  default_prompt: "Use $obsidian-project-log to record meaningful work from the current Git repository in its Obsidian project log."
