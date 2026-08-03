@@ -26,6 +26,13 @@ local oxfmt_files = {
   "oxfmt.config.mts",
 }
 
+local vite_plus_files = {
+  "vite.config.js",
+  "vite.config.mjs",
+  "vite.config.ts",
+  "vite.config.mts",
+}
+
 local eslint_files = {
   "eslint.config.js",
   "eslint.config.mjs",
@@ -59,6 +66,31 @@ local function package_json_has(bufnr, key)
   return parsed_ok and package[key] ~= nil
 end
 
+local function package_json_has_dependency(bufnr, dependency)
+  local package_json = vim.fs.find("package.json", {
+    path = vim.api.nvim_buf_get_name(bufnr),
+    upward = true,
+    type = "file",
+  })[1]
+
+  if not package_json then
+    return false
+  end
+
+  local ok, contents = pcall(vim.fn.readfile, package_json)
+  if not ok then
+    return false
+  end
+
+  local parsed_ok, package = pcall(vim.json.decode, table.concat(contents, "\n"))
+  if not parsed_ok then
+    return false
+  end
+
+  return (package.dependencies and package.dependencies[dependency] ~= nil)
+    or (package.devDependencies and package.devDependencies[dependency] ~= nil)
+end
+
 local function has_file(bufnr, files)
   return vim.fs.find(files, {
     path = vim.api.nvim_buf_get_name(bufnr),
@@ -79,6 +111,10 @@ local function has_oxfmt_config(bufnr)
   return has_file(bufnr, oxfmt_files)
 end
 
+local function has_vite_plus_config(bufnr)
+  return has_file(bufnr, vite_plus_files) and package_json_has_dependency(bufnr, "vite-plus")
+end
+
 local function has_eslint_config(bufnr)
   return has_file(bufnr, eslint_files) or package_json_has(bufnr, "eslintConfig")
 end
@@ -95,7 +131,9 @@ end
 local function web_formatters(bufnr)
   local formatters = {}
 
-  if has_biome_config(bufnr) then
+  if has_vite_plus_config(bufnr) then
+    table.insert(formatters, "oxfmt")
+  elseif has_biome_config(bufnr) then
     table.insert(formatters, "biome")
   elseif has_oxfmt_config(bufnr) then
     table.insert(formatters, "oxfmt")
@@ -110,7 +148,9 @@ local function web_formatters(bufnr)
 end
 
 local function json_formatters(bufnr)
-  if has_biome_config(bufnr) then
+  if has_vite_plus_config(bufnr) then
+    return { "oxfmt" }
+  elseif has_biome_config(bufnr) then
     return { "biome" }
   elseif has_oxfmt_config(bufnr) then
     return { "oxfmt" }
@@ -161,11 +201,15 @@ local function configured_format_on_save(bufnr)
     }, ft)
   then
     has_config = has_eslint_config(bufnr)
+      or has_vite_plus_config(bufnr)
       or has_biome_config(bufnr)
       or has_oxfmt_config(bufnr)
       or has_prettier_config(bufnr)
   elseif vim.tbl_contains({ "css", "html", "scss" }, ft) then
-    has_config = has_biome_config(bufnr) or has_oxfmt_config(bufnr) or has_prettier_config(bufnr)
+    has_config = has_vite_plus_config(bufnr)
+      or has_biome_config(bufnr)
+      or has_oxfmt_config(bufnr)
+      or has_prettier_config(bufnr)
   elseif ft == "yaml" then
     has_config = has_prettier_config(bufnr)
   end

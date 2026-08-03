@@ -263,14 +263,18 @@ Conform を使い、ファイル種別ごとに次の formatter / fixer を使�
 Mason は `biome`, `eslint_d`, `oxfmt`, `prettier`, `prettierd`, `shellcheck`, `shfmt`, `stylua`, `taplo` を同期対象にします。
 Tailwind class sorting, Stylelint, HTMLHint などは dotfiles 側では標準化しません。
 プロジェクトに Prettier plugin や lint 設定がある場合は、プロジェクト側の formatter / linter として動かします。
+Vite+ プロジェクトではプロジェクトローカルの Oxfmt を優先し、`vite.config.ts` の `fmt` 設定を保存時フォーマットにも使います。
+別の `.oxfmtrc.json` は必要ありません。
 
-Oxlint は lint とその自動修正を担当し、コードの字下げや改行などの整形は Oxfmt が担当します。
-Oxlint の `--fix` はプロジェクト側の lint コマンドで実行し、保存時フォーマットには Oxfmt を使います。
+Oxlint は LSP として lint、diagnostics、コードアクションを担当し、コードの字下げや改行などの整形は Oxfmt が担当します。
+プロジェクトに Oxlint の設定または依存関係がある場合に起動し、プロジェクトローカルの `oxlint` を優先します。
+自動修正は `<leader>ca` のコードアクションまたはプロジェクト側の `oxlint --fix` で実行し、保存時フォーマットには Oxfmt を使います。
 
 保存時フォーマットを有効化する設定ファイルの例です。
 
 | 対象       | 設定                                                              |
 | ---------- | ----------------------------------------------------------------- |
+| Vite+      | `vite.config.*` と `package.json` の `vite-plus` 依存関係         |
 | Biome      | `biome.json`, `biome.jsonc`                                       |
 | Oxfmt      | `.oxfmtrc.json`, `.oxfmtrc.jsonc`, `oxfmt.config.ts`, `oxfmt.config.mts` |
 | Prettier   | `.prettierrc*`, `prettier.config.*`, `package.json` の `prettier` |
@@ -290,7 +294,7 @@ LSP は Neovim の `vim.lsp.config()` / `vim.lsp.enable()` で設定していま
 | Go                      | `gopls`                   |
 | Python                  | `pyright`                 |
 | Rust                    | `rust_analyzer`           |
-| TypeScript / JavaScript | `vtsls`, `eslint`         |
+| TypeScript / JavaScript | `vtsls`, `eslint`, `oxlint` |
 | HTML / CSS / JSON       | `html`, `cssls`, `jsonls` |
 | Astro                   | `astro`                   |
 | Svelte                  | `svelte`                  |
@@ -304,7 +308,7 @@ LSP は Neovim の `vim.lsp.config()` / `vim.lsp.enable()` で設定していま
 | YAML                    | `yamlls`                  |
 | Terraform               | `terraformls`             |
 
-Mason はこれらの LSP を同期対象にします。
+Mason はこれらの LSP を同期対象にします。Oxlint はプロジェクトに設定または依存関係がある場合に診断を表示します。
 JSON と YAML は SchemaStore を使い、`package.json`、`tsconfig.json`、GitHub Actions などの schema 補完を有効にします。
 
 ## フロントエンド補助

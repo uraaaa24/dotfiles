@@ -179,6 +179,11 @@ vim.lsp.config("eslint", {
   capabilities = capabilities,
 })
 
+-- Oxlint
+vim.lsp.config("oxlint", {
+  capabilities = capabilities,
+})
+
 -- HTML / CSS / JSON
 vim.lsp.config("html", {
   cmd = { vim.fn.stdpath("data") .. "/mason/bin/vscode-html-language-server", "--stdio" },
@@ -311,6 +316,7 @@ vim.lsp.enable({
   "vtsls",
   "vue_ls",
   "eslint",
+  "oxlint",
   "html",
   "cssls",
   "jsonls",

@@ -13,6 +13,7 @@ return {
         "cssmodules_ls",
         "dockerls",
         "lua_ls",
+        "oxlint",
         "gopls",
         "pyright",
         "rust_analyzer",

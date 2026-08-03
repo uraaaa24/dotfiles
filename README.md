@@ -106,7 +106,7 @@ On macOS, `task link` links this repo's `.config/lazygit` to:
 Runtime versions are managed by mise and pinned by major or minor series in `.config/mise/config.toml`.
 This avoids unexpected major upgrades while still allowing patch updates within the selected series.
 
-zsh initializes mise and direnv.
+zsh initializes mise, direnv, and Vite Plus when `~/.vite-plus/env` exists.
 Use project-local `.envrc` files for per-project environment variables or runtime activation such as:
 
 ```sh

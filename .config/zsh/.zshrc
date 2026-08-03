@@ -100,3 +100,10 @@ fi
 if [[ -r /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
   source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
+
+# ============================================================
+#  Vite Plus
+# ============================================================
+if [[ -r "$HOME/.vite-plus/env" ]]; then
+  . "$HOME/.vite-plus/env"
+fi
