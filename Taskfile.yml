@@ -67,6 +67,7 @@ tasks:
           echo "Linked: $dst -> $src"
         }
 
+        link_path "$repo_root/.config/zsh/.zprofile" "$home_dir/.zprofile"
         link_path "$repo_root/.config/zsh/.zshrc" "$home_dir/.zshrc"
         link_path "$repo_root/.config/zsh/.p10k.zsh" "$home_dir/.p10k.zsh"
         link_path "$repo_root/.editorconfig" "$home_dir/.editorconfig"
@@ -113,6 +114,7 @@ tasks:
           ".config/tmux/tmux.conf"
           ".config/wezterm/wezterm.lua"
           ".config/zsh/.p10k.zsh"
+          ".config/zsh/.zprofile"
           ".config/zsh/.zshrc"
           ".config/ai/AGENTS.md"
           ".config/ai/skills"
@@ -290,3 +292,43 @@ tasks:
     desc: Sync Neovim plugins
     cmds:
       - nvim --headless "+Lazy! sync" +qa
+
+  nvim:docs:build:
+    desc: Build the Neovim guide as standalone HTML
+    silent: true
+    cmds:
+      - |
+        set -euo pipefail
+
+        if ! command -v pandoc >/dev/null 2>&1; then
+          echo "pandoc not found. Run: task brew:bundle"
+          exit 1
+        fi
+
+        docs_output_dir="/tmp/dotfiles-nvim-docs"
+        mkdir -p "$docs_output_dir"
+
+        pandoc \
+          .config/nvim/README.md \
+          --from=gfm \
+          --to=html5 \
+          --standalone \
+          --embed-resources \
+          --toc \
+          --toc-depth=2 \
+          --metadata title="Neovim 操作ガイド" \
+          --metadata lang=ja \
+          --template=.config/nvim/docs.html \
+          --css=.config/nvim/docs.css \
+          --output="$docs_output_dir/index.html"
+
+        echo "Built: $docs_output_dir/index.html"
+
+  nvim:docs:
+    desc: Build and serve the Neovim guide at http://localhost:8765
+    cmds:
+      - task: nvim:docs:build
+      - |
+        echo "Open http://localhost:8765"
+        echo "Press Ctrl-C to stop the server."
+        python3 -m http.server 8765 --bind 127.0.0.1 --directory /tmp/dotfiles-nvim-docs

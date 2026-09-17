@@ -42,6 +42,6 @@ term = xterm-ghostty
 # Shift+Enterで改行（複数行入力用）
 keybind = shift+enter=text:\n
 
-# Native splits for when tmux is not running.
-keybind = cmd+d=new_split:right
-keybind = cmd+shift+d=new_split:down
+# tmux owns pane splitting; remove Ghostty's default native split shortcuts.
+keybind = cmd+d=unbind
+keybind = cmd+shift+d=unbind

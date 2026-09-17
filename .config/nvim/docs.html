@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="$lang$">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>$title$</title>
+    $for(css)$
+    <link rel="stylesheet" href="$css$" />
+    $endfor$
+  </head>
+  <body>
+    <div class="docs-shell">
+      <aside class="docs-sidebar">
+        <a class="docs-brand" href="#top" aria-label="ガイドの先頭へ">
+          <span>
+            <strong>Neovim Guide</strong>
+            <small>操作リファレンス</small>
+          </span>
+        </a>
+
+        <label class="docs-search" for="docs-search-input">
+          <span>ガイド内を検索</span>
+          <span class="docs-search-control">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z" />
+            </svg>
+            <input id="docs-search-input" type="search" placeholder="キーや目的を入力" autocomplete="off" />
+            <kbd>/</kbd>
+          </span>
+        </label>
+        <p id="docs-search-status" class="docs-search-status" aria-live="polite"></p>
+
+        $if(toc)$
+        <nav id="TOC" aria-label="目次">
+          <p class="docs-nav-title">目次</p>
+          $toc$
+        </nav>
+        $endif$
+      </aside>
+
+      <main id="docs-content" class="docs-content">
+        <header id="top" class="docs-hero">
+          <h1>$title$</h1>
+          <p class="docs-lead">迷ったときに、目的から操作へすぐ戻るためのガイド。</p>
+          <div class="docs-callout">
+            <strong>Leader</strong>
+            <kbd>Space</kbd>
+            <span>を押してから、続くキーを入力します。</span>
+          </div>
+          <nav class="docs-quick-links" aria-label="よく使う項目">
+            <a href="#バッファ">ファイル移動</a>
+            <a href="#git-差分を見る">Git・diff</a>
+            <a href="#コードを読む">定義・参照</a>
+            <a href="#ターミナルとの使い分け">tmux連携</a>
+          </nav>
+        </header>
+
+        $body$
+
+        <div id="docs-no-results" class="docs-no-results" hidden>
+          <strong>該当する項目がありません</strong>
+          <span>別のキー名や目的で検索してください。</span>
+        </div>
+      </main>
+    </div>
+
+    <button id="docs-back-to-top" class="docs-back-to-top" type="button" aria-label="ページ上部へ戻る">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6" /></svg>
+    </button>
+
+    <script>
+      (() => {
+        const content = document.querySelector("#docs-content");
+        const hero = document.querySelector(".docs-hero");
+        const noResults = document.querySelector("#docs-no-results");
+        const search = document.querySelector("#docs-search-input");
+        const status = document.querySelector("#docs-search-status");
+        const tocLinks = [...document.querySelectorAll("#TOC a[href^='#']")];
+        const sourceNodes = [...content.children].filter((node) => node !== hero && node !== noResults);
+        const fragment = document.createDocumentFragment();
+        let section;
+
+        sourceNodes.forEach((node) => {
+          if (!section || node.tagName === "H2") {
+            section = document.createElement("section");
+            section.className = node.tagName === "H2" ? "docs-section" : "docs-section docs-intro";
+            fragment.append(section);
+          }
+          section.append(node);
+        });
+
+        content.insertBefore(fragment, noResults);
+        const sections = [...content.querySelectorAll(".docs-section")];
+
+        const normalize = (value) => value.toLocaleLowerCase("ja").replace(/\s+/g, " ").trim();
+
+        const updateSearch = () => {
+          const query = normalize(search.value);
+          let visible = 0;
+
+          sections.forEach((item) => {
+            const matches = !query || normalize(item.textContent).includes(query);
+            item.hidden = !matches;
+            if (matches) visible += 1;
+          });
+
+          noResults.hidden = visible !== 0;
+          status.textContent = query ? visible + "件のセクションを表示" : "";
+        };
+
+        search.addEventListener("input", updateSearch);
+        search.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") {
+            search.value = "";
+            updateSearch();
+            search.blur();
+          }
+        });
+
+        document.addEventListener("keydown", (event) => {
+          const target = event.target;
+          const isTyping = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement;
+          if (event.key === "/" && !isTyping) {
+            event.preventDefault();
+            search.focus();
+          }
+        });
+
+        const headings = [...document.querySelectorAll(".docs-section > h2[id]")];
+        const observer = new IntersectionObserver(
+          (entries) => {
+            const current = entries.find((entry) => entry.isIntersecting);
+            if (!current) return;
+            tocLinks.forEach((link) => {
+              if (link.getAttribute("href") === "#" + current.target.id) {
+                link.setAttribute("aria-current", "location");
+              } else {
+                link.removeAttribute("aria-current");
+              }
+            });
+          },
+          { rootMargin: "-15% 0px -75%" },
+        );
+        headings.forEach((heading) => observer.observe(heading));
+
+        const backToTop = document.querySelector("#docs-back-to-top");
+        const toggleBackToTop = () => backToTop.classList.toggle("is-visible", window.scrollY > 600);
+        window.addEventListener("scroll", toggleBackToTop, { passive: true });
+        backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+        toggleBackToTop();
+      })();
+    </script>
+  </body>
+</html>

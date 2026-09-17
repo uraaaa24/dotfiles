@@ -8,7 +8,10 @@ return {
     },
     opts = {
       keymap = {
-        preset = "super-tab",
+        preset = "default",
+        ["<Tab>"] = false,
+        ["<S-Tab>"] = false,
+        ["<CR>"] = { "accept", "fallback" },
       },
       appearance = {
         nerd_font_variant = "mono",

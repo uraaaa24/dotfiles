@@ -4,8 +4,8 @@ Personal WezTerm shortcut reference.
 
 ## Role
 
-WezTerm can host native panes when tmux is not running.
-For persistent sessions, start tmux manually with `tmux new -A -s main`, then use tmux for panes:
+Local interactive shells in WezTerm automatically attach to the `main` tmux session.
+tmux exclusively owns pane and session management:
 
 | Key | Action |
 | --- | --- |
@@ -19,12 +19,8 @@ For persistent sessions, start tmux manually with `tmux new -A -s main`, then us
 | `Ctrl-q x` | Close pane |
 | `Ctrl-q D` | Detach |
 
-When tmux is not running, WezTerm uses native pane splits with matching directions:
-
-| Key | Action |
-| --- | --- |
-| `Cmd-d` | Split right |
-| `Cmd-Shift-d` | Split down |
+WezTerm's native `Cmd-d` and `Cmd-Shift-d` split shortcuts are disabled to avoid two pane layers.
+Set `DOTFILES_SKIP_TMUX=1` before starting a shell when a temporary non-tmux shell is needed.
 
 ## WezTerm Shortcuts
 
@@ -34,7 +30,5 @@ When tmux is not running, WezTerm uses native pane splits with matching directio
 | `Cmd-t` | New tab |
 | `Cmd-w` | Close tab |
 | `Cmd-n` | New window |
-| `Cmd-d` | Split right |
-| `Cmd-Shift-d` | Split down |
 | `Cmd-r` | Reload config |
 | `Alt-Enter` | Toggle fullscreen |

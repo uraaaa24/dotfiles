@@ -1,4 +1,19 @@
 # ============================================================
+#  tmux
+# ============================================================
+# Run before Powerlevel10k Instant Prompt can temporarily redirect stdin/stdout.
+# Set DOTFILES_SKIP_TMUX=1 before starting the shell to bypass auto-attach.
+if [[ -o interactive ]] &&
+  [[ -z ${TMUX:-} ]] &&
+  [[ -z ${SSH_CONNECTION:-} && -z ${SSH_TTY:-} ]] &&
+  [[ ${DOTFILES_SKIP_TMUX:-0} != 1 ]] &&
+  [[ -t 0 && -t 1 ]] &&
+  [[ ${TERM_PROGRAM:-} == ghostty || -n ${WEZTERM_PANE:-} ]] &&
+  command -v tmux >/dev/null 2>&1; then
+  exec tmux new-session -A -s main
+fi
+
+# ============================================================
 #  Powerlevel10k Instant Prompt
 # ============================================================
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
@@ -38,6 +53,30 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias lla='ls -al'
 alias vim='nvim'
+
+# ============================================================
+#  Obsidian CLI
+# ============================================================
+function obsidian-safe() {
+  if ! command -v obsidian >/dev/null 2>&1; then
+    print -u2 'obsidian CLI is not installed or is not in PATH'
+    return 127
+  fi
+
+  command open -gj -a Obsidian >/dev/null 2>&1 || true
+
+  local attempt result
+  for attempt in {1..8}; do
+    if result=$(command obsidian "$@" 2>&1); then
+      print -r -- "$result"
+      return 0
+    fi
+    sleep 1
+  done
+
+  print -u2 -- "$result"
+  return 1
+}
 
 # ============================================================
 #  SDKMAN

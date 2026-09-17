@@ -142,6 +142,11 @@ local function web_formatters(bufnr)
     if prettier then
       table.insert(formatters, prettier)
     end
+  else
+    local fallback = first_available(bufnr, "prettier", "prettierd", "oxfmt", "biome")
+    if fallback then
+      table.insert(formatters, fallback)
+    end
   end
 
   return formatters
@@ -176,45 +181,29 @@ local function prettier_formatters(bufnr)
   return prettier and { prettier } or {}
 end
 
-local function configured_format_on_save(bufnr)
+local function supported_format_on_save(bufnr)
   local ft = vim.bo[bufnr].filetype
-  local has_config = false
-
-  if vim.tbl_contains({
+  local supported = vim.tbl_contains({
+    "astro",
+    "css",
+    "html",
+    "javascript",
+    "javascriptreact",
     "markdown",
     "json",
     "jsonc",
     "lua",
     "rust",
+    "scss",
+    "svelte",
     "toml",
-  }, ft) then
-    has_config = true
-  elseif
-    vim.tbl_contains({
-      "astro",
-      "javascript",
-      "javascriptreact",
-      "svelte",
-      "typescript",
-      "typescriptreact",
-      "vue",
-    }, ft)
-  then
-    has_config = has_eslint_config(bufnr)
-      or has_vite_plus_config(bufnr)
-      or has_biome_config(bufnr)
-      or has_oxfmt_config(bufnr)
-      or has_prettier_config(bufnr)
-  elseif vim.tbl_contains({ "css", "html", "scss" }, ft) then
-    has_config = has_vite_plus_config(bufnr)
-      or has_biome_config(bufnr)
-      or has_oxfmt_config(bufnr)
-      or has_prettier_config(bufnr)
-  elseif ft == "yaml" then
-    has_config = has_prettier_config(bufnr)
-  end
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "yaml",
+  }, ft)
 
-  if not has_config then
+  if not supported then
     return nil
   end
 
@@ -253,6 +242,6 @@ return {
       vue = script_formatters,
       yaml = prettier_formatters,
     },
-    format_on_save = configured_format_on_save,
+    format_on_save = supported_format_on_save,
   },
 }

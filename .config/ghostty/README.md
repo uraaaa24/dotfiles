@@ -5,7 +5,7 @@ Personal Ghostty shortcut reference.
 ## Appearance
 
 The current config keeps Ghostty's own display settings.
-tmux only starts inside the terminal; it does not own font size, padding, opacity, blur, or quick terminal behavior.
+Local interactive shells automatically attach to the `main` tmux session, but tmux does not own font size, padding, opacity, blur, or quick terminal behavior.
 
 | Setting | Value |
 | --- | --- |
@@ -30,13 +30,15 @@ tmux only starts inside the terminal; it does not own font size, padding, opacit
 
 ### Splits
 
-Use tmux splits with `Ctrl-q r` and `Ctrl-q d` when tmux is running.
-When tmux is not running, Ghostty provides native splits with matching directions:
+tmux exclusively owns pane splitting:
 
 | Key | Action |
 | --- | --- |
-| `Cmd-d` | Split right |
-| `Cmd-Shift-d` | Split down |
+| `Ctrl-q r` | Split right |
+| `Ctrl-q d` | Split down |
+
+Ghostty's native `Cmd-d` and `Cmd-Shift-d` split shortcuts are disabled to avoid two pane layers.
+Set `DOTFILES_SKIP_TMUX=1` before starting a shell when a temporary non-tmux shell is needed.
 
 ## Working Directory
 

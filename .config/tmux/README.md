@@ -1,14 +1,19 @@
 # tmux
 
-tmux owns pane splitting for this dotfiles setup.
-Ghostty and WezTerm are terminal hosts; they do not own project pane layout.
+tmux owns pane and session management for this dotfiles setup.
+Ghostty and WezTerm automatically attach local interactive shells to the `main` session and do not own project pane layout.
 The real config is `.config/tmux/tmux.conf`.
 
 ## Start Or Reattach
 
+Ghostty and WezTerm normally start or attach automatically.
+From another terminal, run:
+
 ```sh
 tmux new -A -s main
 ```
+
+Set `DOTFILES_SKIP_TMUX=1` before starting a shell to bypass auto-attach temporarily.
 
 ## Prefix
 

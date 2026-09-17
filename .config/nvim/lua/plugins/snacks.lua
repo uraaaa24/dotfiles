@@ -20,7 +20,7 @@ return {
     {
       "<leader>ff",
       function()
-        Snacks.picker.files()
+        Snacks.picker.files({ hidden = true })
       end,
       desc = "Find files",
     },
@@ -44,6 +44,13 @@ return {
         Snacks.picker.help()
       end,
       desc = "Find help",
+    },
+    {
+      "<leader>gs",
+      function()
+        Snacks.picker.git_status()
+      end,
+      desc = "Git status",
     },
   },
 }
