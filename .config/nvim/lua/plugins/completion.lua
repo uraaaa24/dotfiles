@@ -17,13 +17,18 @@ return {
         nerd_font_variant = "mono",
       },
       completion = {
+        menu = {
+          auto_show = false,
+        },
         documentation = {
-          auto_show = true,
-          auto_show_delay_ms = 200,
+          auto_show = false,
         },
       },
       signature = {
         enabled = true,
+        trigger = {
+          enabled = false,
+        },
       },
       sources = {
         default = { "lsp", "path", "snippets", "buffer" },
