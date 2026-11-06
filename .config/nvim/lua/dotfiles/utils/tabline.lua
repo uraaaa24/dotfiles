@@ -8,7 +8,7 @@ local TRUNCATE_TO = 17
 
 ---Setup highlight groups for the tabline
 function M.setup()
-  local colors = require("kanagawa.colors").setup({ theme = "dragon" }).palette
+  local colors = require("kanagawa.colors").setup({ theme = "wave" }).palette
 
   -- Active tab: yellow background, white text
   vim.api.nvim_set_hl(0, "TabLineActive", {

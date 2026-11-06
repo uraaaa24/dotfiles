@@ -4,7 +4,7 @@ local lazygit_utils = require("dotfiles.utils.lazygit")
 
 require("kanagawa").setup({
   transparent = true,
-  colors = { theme = { dragon = { ui = { bg_gutter = "none" } } } },
+  colors = { theme = { wave = { ui = { bg_gutter = "none" } } } },
   overrides = function()
     return {
       Normal = { bg = "none" },
@@ -17,7 +17,7 @@ require("kanagawa").setup({
     }
   end,
 })
-vim.cmd.colorscheme("kanagawa-dragon")
+vim.cmd.colorscheme("kanagawa-wave")
 
 require("mini.icons").setup()
 require("mini.icons").mock_nvim_web_devicons()
