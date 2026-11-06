@@ -81,8 +81,6 @@ tasks:
         link_path "$repo_root/.config/nvim" "$config_home/nvim"
         link_path "$repo_root/.config/tmux" "$config_home/tmux"
         link_path "$repo_root/.config/wezterm" "$config_home/wezterm"
-        link_path "$repo_root/.config/ai/AGENTS.md" "$home_dir/.codex/AGENTS.md"
-        link_path "$repo_root/.config/ai/AGENTS.md" "$home_dir/.claude/CLAUDE.md"
 
         for skill_dir in "$repo_root"/.config/ai/skills/*; do
           if [[ ! -d "$skill_dir" || ! -f "$skill_dir/SKILL.md" ]]; then
@@ -119,7 +117,6 @@ tasks:
           ".config/zsh/.p10k.zsh"
           ".config/zsh/.zprofile"
           ".config/zsh/.zshrc"
-          ".config/ai/AGENTS.md"
           ".config/ai/skills"
           ".editorconfig"
           "Brewfile"
