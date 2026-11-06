@@ -58,9 +58,8 @@ task link:dry-run
 - `task brew:doctor` Run Homebrew diagnostics
 - `task mise:install` Install runtimes via mise
 - `task ai:setup` Install AI CLIs (Copilot, Codex, Gemini)
-- `task nvim:sync` Sync Neovim plugins
-- `task nvim:docs` Build and serve the Neovim guide at `http://localhost:8765`
-- `task nvim:docs:build` Build a standalone HTML guide without starting a server
+- `task nvim:sync` Install and update Neovim plugins with `vim.pack`
+- `task nvim:tools` Install Commitizen for the LazyGit shortcut
 
 `task link` backs up an existing non-matching path next to the original before replacing it with a dotfiles symlink.
 For example:
@@ -94,21 +93,15 @@ Adding another Skill does not require changing `Taskfile.yml`. The personal work
 `task check` validates required config paths, Taskfile readability, zsh syntax, mise config readability, and optional app checks when the tools are installed:
 `stylua --check .config/nvim`, WezTerm key binding validation, and Ghostty config validation.
 
-## Neovim Guide
+## Neovim
 
-The Neovim操作メモ in `.config/nvim/README.md` can be viewed as a browser-friendly HTML guide:
-
-```sh
-task nvim:docs
-```
-
-Open `http://localhost:8765` and stop the local server with `Ctrl-C`.
-The server listens on `127.0.0.1` only. The standalone HTML is generated at `/tmp/dotfiles-nvim-docs/index.html` and is not tracked by Git.
-Pandoc is installed through the `Brewfile`; Python's standard library serves the generated file.
+The editor uses Neovim 0.12+, built-in `vim.pack`, and Kanagawa Dragon. `task nvim:sync` updates plugins; Mason installs language tools when Neovim starts. `git-delta` supplies LazyGit's diff renderer. Keymaps and daily use are documented in `.config/nvim/README.md`.
 
 ## LazyGit
 
 LazyGit uses a darker gray selected-line background so focused rows stay visible without washing out file diffs.
+Neovim opens LazyGit with `;g`. Git diffs use `delta`; automatic fetch and mouse input are disabled.
+The file panel's `C` command runs Commitizen. `task link` links `.config/git/.czrc` to `~/.czrc`; `task nvim:tools` installs its CLI.
 On macOS, `task link` links this repo's `.config/lazygit` to:
 
 ```sh

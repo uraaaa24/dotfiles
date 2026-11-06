@@ -10,6 +10,7 @@ tasks:
       - task: brew:bundle
       - task: mise:install
       - task: ai:setup
+      - task: nvim:tools
 
   link:
     desc: Link dotfiles into $HOME
@@ -72,6 +73,7 @@ tasks:
         link_path "$repo_root/.config/zsh/.p10k.zsh" "$home_dir/.p10k.zsh"
         link_path "$repo_root/.editorconfig" "$home_dir/.editorconfig"
         link_path "$repo_root/.config/git" "$config_home/git"
+        link_path "$repo_root/.config/git/.czrc" "$home_dir/.czrc"
         link_path "$repo_root/.config/ghostty" "$config_home/ghostty"
         link_path "$repo_root/.config/lazygit" "$home_dir/Library/Application Support/lazygit"
         link_path "$repo_root/Brewfile" "$home_dir/.Brewfile"
@@ -107,6 +109,7 @@ tasks:
         required_paths=(
           ".config/git/config"
           ".config/git/ignore"
+          ".config/git/.czrc"
           ".config/ghostty/config"
           ".config/lazygit/config.yml"
           ".config/mise/config.toml"
@@ -288,47 +291,20 @@ tasks:
 
         echo "ℹ️ Next steps: run copilot, codex, gemini and follow login prompts."
 
-  nvim:sync:
-    desc: Sync Neovim plugins
-    cmds:
-      - nvim --headless "+Lazy! sync" +qa
-
-  nvim:docs:build:
-    desc: Build the Neovim guide as standalone HTML
-    silent: true
+  nvim:tools:
+    desc: Install Commitizen for Neovim's LazyGit command
     cmds:
       - |
         set -euo pipefail
-
-        if ! command -v pandoc >/dev/null 2>&1; then
-          echo "pandoc not found. Run: task brew:bundle"
+        if ! command -v npm >/dev/null 2>&1; then
+          echo "npm not found. Run: task mise:install"
           exit 1
         fi
+        if ! command -v git-cz >/dev/null 2>&1 || ! command -v cz >/dev/null 2>&1; then
+          npm install -g commitizen cz-git
+        fi
 
-        docs_output_dir="/tmp/dotfiles-nvim-docs"
-        mkdir -p "$docs_output_dir"
-
-        pandoc \
-          .config/nvim/README.md \
-          --from=gfm \
-          --to=html5 \
-          --standalone \
-          --embed-resources \
-          --toc \
-          --toc-depth=2 \
-          --metadata title="Neovim 操作ガイド" \
-          --metadata lang=ja \
-          --template=.config/nvim/docs.html \
-          --css=.config/nvim/docs.css \
-          --output="$docs_output_dir/index.html"
-
-        echo "Built: $docs_output_dir/index.html"
-
-  nvim:docs:
-    desc: Build and serve the Neovim guide at http://localhost:8765
+  nvim:sync:
+    desc: Sync Neovim plugins
     cmds:
-      - task: nvim:docs:build
-      - |
-        echo "Open http://localhost:8765"
-        echo "Press Ctrl-C to stop the server."
-        python3 -m http.server 8765 --bind 127.0.0.1 --directory /tmp/dotfiles-nvim-docs
+      - nvim --headless "+lua vim.pack.update(nil, { force = true })" +qa

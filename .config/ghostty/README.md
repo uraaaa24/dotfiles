@@ -1,5 +1,7 @@
 # Ghostty
 
+Neovim uses HackGen Console NF for icons. macOS Option is sent as Alt for Copilot's Alt-key shortcuts.
+
 Personal Ghostty shortcut reference.
 
 ## Appearance

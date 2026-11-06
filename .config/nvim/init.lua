@@ -1,8 +1,10 @@
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+if vim.loader then
+  vim.loader.enable()
+end
 
-require("config.options")
-require("config.keymaps")
-require("config.autocmds")
-require("config.lazy")
-require("config.lsp")
+require("dotfiles.config.options")
+require("dotfiles.config.keymaps")
+require("dotfiles.config.autocmds")
+require("dotfiles.config.commands")
+require("dotfiles.config.workarounds")
+require("dotfiles.plugins")

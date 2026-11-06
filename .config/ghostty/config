@@ -4,7 +4,7 @@ theme = "Kanagawa Dragon"
 # Font
 font-size = 16
 adjust-cell-height = 10%
-# font-family = "BlexMono Nerd Font Mono"
+font-family = "HackGen Console NF"
 
 window-padding-x = 8
 window-padding-y = 8
@@ -37,7 +37,7 @@ initial-window = false
 term = xterm-ghostty
 
 # tmux/Neovim で Alt+... 系キーを使うなら有効化
-# macos-option-as-alt = true
+macos-option-as-alt = true
 
 # Shift+Enterで改行（複数行入力用）
 keybind = shift+enter=text:\n

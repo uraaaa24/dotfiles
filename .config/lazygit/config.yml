@@ -1,6 +1,17 @@
+customCommands:
+  - key: "C"
+    command: "git cz"
+    description: "Commit with Commitizen"
+    context: "files"
+    output: terminal
 gui:
+  mouseEvents: false
   theme:
     selectedLineBgColor:
       - "#2a2a2a"
     inactiveViewSelectedLineBgColor:
       - "#242424"
+git:
+  autoFetch: false
+  diffRenderers:
+    - command: delta --dark --paging=never
