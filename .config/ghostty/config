@@ -12,7 +12,6 @@ window-padding-balance = true
 
 background-opacity = 0.80
 background-blur-radius = 20
-adjust-cell-height = 10%
 
 macos-titlebar-style = transparent
 macos-window-shadow = true

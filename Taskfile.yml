@@ -4,13 +4,17 @@ tasks:
   setup:
     desc: Initial setup
     cmds:
-      - task: link
-      - task: check
-      - task: brew:bootstrap
-      - task: brew:bundle
-      - task: mise:install
-      - task: ai:setup
-      - task: nvim:tools
+      - |
+        set -euo pipefail
+        export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+        task brew:bootstrap
+        task brew:bundle
+        task link
+        task mise:install
+        eval "$(mise env --shell bash)"
+        task ai:setup
+        task nvim:tools
+        task check
 
   link:
     desc: Link dotfiles into $HOME
@@ -112,6 +116,7 @@ tasks:
           ".config/lazygit/config.yml"
           ".config/mise/config.toml"
           ".config/nvim/init.lua"
+          ".config/nvim/nvim-pack-lock.json"
           ".config/tmux/tmux.conf"
           ".config/wezterm/wezterm.lua"
           ".config/zsh/.p10k.zsh"
@@ -149,7 +154,9 @@ tasks:
 
         task --list >/dev/null
 
+        zsh -n .config/zsh/.zprofile
         zsh -n .config/zsh/.zshrc
+        zsh -n .config/zsh/.p10k.zsh
 
         if command -v mise >/dev/null 2>&1; then
           mise config >/dev/null
@@ -159,12 +166,16 @@ tasks:
           stylua --check .config/nvim
         fi
 
+        if command -v nvim >/dev/null 2>&1; then
+          nvim --headless --clean -i NONE -l .config/nvim/tests/oil_git_status.lua
+        fi
+
         if command -v wezterm >/dev/null 2>&1; then
           wezterm --config-file .config/wezterm/wezterm.lua show-keys --lua >/dev/null
         fi
 
         if command -v ghostty >/dev/null 2>&1; then
-          ghostty_output="$(ghostty +validate-config 2>&1 >/dev/null)" || {
+          ghostty_output="$(ghostty +validate-config --config-file="$PWD/.config/ghostty/config" 2>&1)" || {
             echo "$ghostty_output"
             exit 1
           }

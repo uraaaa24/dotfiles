@@ -37,5 +37,5 @@ The tmux prefix is `Ctrl-q`.
 | `Ctrl-q R` | Reload config                    |
 
 New panes and windows inherit the current pane's working directory.
-The tmux status line is disabled; Ghostty or WezTerm owns colors, opacity, blur, fonts, and other appearance settings.
+The tmux status line appears at the top with window names. Ghostty or WezTerm owns opacity, blur, fonts, and terminal appearance.
 tmux still advertises RGB support to apps inside panes so truecolor output survives the tmux hop.

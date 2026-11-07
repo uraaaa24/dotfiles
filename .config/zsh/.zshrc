@@ -55,30 +55,6 @@ alias lla='ls -al'
 alias vim='nvim'
 
 # ============================================================
-#  Obsidian CLI
-# ============================================================
-function obsidian-safe() {
-  if ! command -v obsidian >/dev/null 2>&1; then
-    print -u2 'obsidian CLI is not installed or is not in PATH'
-    return 127
-  fi
-
-  command open -gj -a Obsidian >/dev/null 2>&1 || true
-
-  local attempt result
-  for attempt in {1..8}; do
-    if result=$(command obsidian "$@" 2>&1); then
-      print -r -- "$result"
-      return 0
-    fi
-    sleep 1
-  done
-
-  print -u2 -- "$result"
-  return 1
-}
-
-# ============================================================
 #  SDKMAN
 # ============================================================
 export SDKMAN_DIR="$HOME/.sdkman"
@@ -89,8 +65,8 @@ fi
 # ============================================================
 #  Powerlevel10k Theme
 # ============================================================
-if [[ -s "$HOME/powerlevel10k/powerlevel10k.zsh-theme" ]]; then
-  source "$HOME/powerlevel10k/powerlevel10k.zsh-theme"
+if [[ -r "${HOMEBREW_PREFIX:-/opt/homebrew}/share/powerlevel10k/powerlevel10k.zsh-theme" ]]; then
+  source "${HOMEBREW_PREFIX:-/opt/homebrew}/share/powerlevel10k/powerlevel10k.zsh-theme"
 fi
 
 if [[ -f "$HOME/.p10k.zsh" ]]; then
@@ -125,8 +101,8 @@ fi
 #  Terraform completion
 # ============================================================
 autoload -U +X bashcompinit && bashcompinit
-if [[ -x /opt/homebrew/bin/terraform ]]; then
-  complete -o nospace -C /opt/homebrew/bin/terraform terraform
+if command -v terraform >/dev/null 2>&1; then
+  complete -o nospace -C terraform terraform
 fi
 
 # ============================================================

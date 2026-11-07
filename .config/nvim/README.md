@@ -4,7 +4,7 @@ Neovim 0.12以降の `vim.pack` を使う、コードレビュー中心の設定
 
 ## セットアップと更新
 
-`task link:dry-run` でリンク先を確認し、必要なら `task link` を実行します。プラグインは初回起動時に `vim.pack` が導入します。更新はリポジトリのルートから `task nvim:sync` を実行します。言語サーバーやフォーマッターは Mason が起動時に確認し、自動更新はしません。Treesitter はパーサーを追加・更新します。
+`task link:dry-run` でリンク先を確認し、必要なら `task link` を実行します。プラグインは初回起動時に `vim.pack` が `nvim-pack-lock.json` のリビジョンで導入します。固定ファイルはGit管理し、更新時は設定と一緒に保存します。更新はリポジトリのルートから `task nvim:sync` を実行します。言語サーバーやフォーマッターは Mason が起動時に確認し、自動更新はしません。Treesitter はパーサーを追加・更新します。
 
 必要なCLIは `git`、`tree-sitter` とCコンパイラ、`curl`、`tar`、Node.js/npm、`rg`、`fd`、`lazygit`、`delta` です。`tree-sitter` はMasonからも導入します。アイコンには Nerd Font を使います。Copilot は初回に `:Copilot auth` が必要です。
 
@@ -39,7 +39,7 @@ Git状態の解析チェックは、リポジトリのルートで `nvim --headl
 
 ## LSP、補完、整形
 
-`vim.lsp.enable()` で ESLint、Oxlint、Lua、CSS、TypeScript/JavaScript、Tailwind CSS、Rust のサーバーを有効にします。サーバー固有の設定は `after/lsp/` にあります。blink.cmp は Enter で補完を確定し、説明を200ms後に表示します。mini.pairs は括弧を補完します。Copilot の候補は `Ctrl-l` で確定し、Alt-l / Alt-Shift-l で一部を確定します。GhosttyではOptionをAltとして送ります。
+`vim.lsp.enable()` で ESLint、Oxlint、Lua、CSS、TypeScript/JavaScript、Tailwind CSS、Rust のサーバーを有効にします。サーバー固有の設定は `after/lsp/` にあります。blink.cmp は Enter で補完を確定し、説明を200ms後に表示します。mini.pairs は括弧を補完します。挿入モードのインライン候補はCopilotが表示します。Copilot の候補は `Ctrl-l` で確定し、Alt-l / Alt-Shift-l で一部を確定します。GhosttyではOptionをAltとして送ります。
 
 | キー | 動作 |
 | --- | --- |

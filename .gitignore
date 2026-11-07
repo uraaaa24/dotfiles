@@ -29,7 +29,6 @@ fishd.*
 .config/lazygit/state.yml
 
 # nvim
-.config/nvim/nvim-pack-lock.json
 tt.*
 .tests
 doc/tags
